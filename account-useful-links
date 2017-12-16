@@ -1,0 +1,100 @@
+{%if section.settings.defaulthome_blogslider22%}
+<div class="home-accout-page">
+  
+    <div class="row">
+{% if section.settings.blog_title != blank %}
+        <div class="heading-block2 col-md-12">
+          <h2 class="title">
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ section.settings.blog_title | split: '|' | first }}</span>
+            <span class="lang2">{{ section.settings.blog_title | split: '|' | last }}</span>
+            {% else %}
+            {{ section.settings.blog_title | split: '|' | first }}
+            {% endif %}
+          </h2>
+        </div>
+        {% endif %}
+      <div class="main-blog blog-slide text-center"> 
+        {% for block in section.blocks %}       
+        <div class="col-sm-3 col-md-2 col-xs-4 blog-latest-blog">
+          <div class="row">
+          {%if block.settings.display_blog%}
+            {% if block.settings.blog_faq_banner_image != blank%}
+      <div class="col-sm-12 img">
+        <a href="{%if block.settings.blog_banner_link != blank%}{{block.settings.blog_banner_link}}{%endif%}">   <img src="{{ block.settings.blog_faq_banner_image | img_url: '600x' }}" alt="{{ shop.name }}"/> </a>
+      </div>
+      {%endif%}
+          <div class="col-sm-12">
+             <a href="{%if block.settings.blog_banner_link != blank%}{{block.settings.blog_banner_link}}{%endif%}">
+            {%if block.settings.blogs_title-title != blank %}
+             
+            {{block.settings.blogs_title-title}}
+             
+                {%endif%}
+             </a>
+          </div>
+          {%endif%}
+        </div>
+        </div>
+        {%endfor%}
+        
+      </div>
+    </div>
+  </div>
+ 
+{%endif%}
+{% schema %}
+  {
+    "name": "text",
+    "settings": [
+{
+"type": "checkbox",
+"id": "defaulthome_blogslider22",
+"label": "enable"
+},
+{
+"type": "text",
+"id": "blog_title",
+"label": "Heading",
+"default": "Blog Posts"
+}
+
+],
+"blocks":[
+{
+  "type": "select",
+  "name": "Add block",
+      "settings": [
+
+{
+        "type": "checkbox",
+        "id": "display_blog",
+        "label": "Show",
+        "default": true
+      },
+{
+"type": "image_picker",
+"id": "blog_faq_banner_image",
+"label": "Images"
+},
+{
+"type": "text",
+"id": "blogs_title-title",
+"label": "Title"
+},
+{
+"type": "url",
+"id": "blog_banner_link",
+"label": "Link"
+}
+]
+}
+],
+"presets": [
+{
+"name": "text and image for join",
+"category": "text"
+}
+]
+  }
+{% endschema %}
