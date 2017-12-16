@@ -1,0 +1,97 @@
+{%if section.settings.enable_google-portal-blog1 %}
+{% if section.settings.portal-heading != blank %}
+        <div class="heading-block2">
+          <h2 class="title">
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ section.settings.portal-heading | split: '|' | first }}</span>
+            <span class="lang2">{{ section.settings.portal-heading | split: '|' | last }}</span>
+            {% else %}
+            {{ section.settings.portal-heading | split: '|' | first }}
+            {% endif %}
+          </h2>
+        </div>
+        {% endif %}  
+
+<div class="row">
+{% for block in section.blocks %}
+{% assign tag1 = block.settings.portal-tag-1 %}
+{%if block.settings.display_portal%}
+{% if customer.tags contains tag1 %}
+<div class="col-sm-3 col-xs-6">
+
+<a href="{%if block.settings.portal-title-url != blank %}{{block.settings.portal-title-url}}{%endif%}">
+{% if block.settings.portal_image != blank%}
+  <img src="{{ block.settings.portal_image | img_url: '2048x' }}" alt="{{ shop.name }}"/>
+ 
+{%endif%}
+
+{%if block.settings.portal-title != blank%}
+<p>
+  {{block.settings.portal-title}}
+</p>
+{%endif%}
+</a>
+</div>
+{%endif%}
+{%endif%}
+	{%endfor%}
+ {%endif%}
+</div>
+{% schema %}
+{
+"name": "portal logo and image",
+"settings": [
+{
+"type": "checkbox",
+"id": "enable_google-portal-blog1",
+"label": "Show portal"
+},
+{
+"type": "text",
+"id": "portal-heading",
+"label": "Portal heading"
+}
+],
+"blocks":[
+{
+"type": "select",
+"name": "Add portal",
+"settings": [
+{
+"type": "checkbox",
+"id": "display_portal",
+"label": "Show portal"
+},
+{
+"type": "image_picker",
+"id": "portal_image",
+"label": "logo portal"
+},
+{
+"type": "text",
+"id": "portal-tag-1",
+"label": "Portal tag"
+},
+{
+"type": "text",
+"id": "portal-title",
+"label": "Title"
+},
+{
+"type": "url",
+"id": "portal-title-url",
+"label": "url"
+}
+]
+}
+],
+"presets": [
+{
+"name": "account my portal",
+"category": "text and image"
+}
+]
+}
+{% endschema %}
+
+
