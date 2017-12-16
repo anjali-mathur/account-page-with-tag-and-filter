@@ -1,0 +1,71 @@
+##membership-type
+
+{% assign tag1 = section.settings.title-1 %}
+{% assign tag2 = section.settings.title-2 %}
+{% assign tag3 = section.settings.title-3 %}
+{% assign tag4 = section.settings.title-4 %}
+{% assign tag5 = section.settings.title-5 %}
+<p>{%if section.settings.title != blank%}
+  {{section.settings.title}}
+{%endif%}
+</p>
+<h4> 
+{% if customer.tags contains tag1 %}
+ {{section.settings.title-1}}
+  {%elsif customer.tags contains tag2%}
+ {{section.settings.title-2}}
+    {%elsif customer.tags contains tag3 %}
+ {{section.settings.title-3}}
+    {%elsif customer.tags contains tag4 %}
+ {{section.settings.title-4}}
+    {%else customer.tags contains tag5%}
+ {{section.settings.title-5}}
+  {%endif%}
+</h4>
+{% schema %}
+  {
+    "name": "membership-type",
+    "settings": [
+{
+"type": "text",
+"id": "title",
+"label": "heading"
+},
+                {
+"type": "header",
+"content": "customer tags"
+},
+{
+"type": "text",
+"id": "title-1",
+"label": "tag"
+},
+{
+"type": "text",
+"id": "title-2",
+"label": "tag"
+},
+{
+"type": "text",
+"id": "title-3",
+"label": "tag"
+},
+{
+"type": "text",
+"id": "title-4",
+"label": "tag"
+},
+{
+"type": "text",
+"id": "title-5",
+"label": "tag"
+}
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
