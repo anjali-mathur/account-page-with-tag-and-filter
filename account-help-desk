@@ -1,0 +1,72 @@
+{% if customer.tags contains 'helpdesk' %}
+<div class="row">
+{% if section.settings.title != blank %}
+        <div class="heading-block2 col-md-12">
+          <h2 class="title">
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ section.settings.title | split: '|' | first }}</span>
+            <span class="lang2">{{ section.settings.title | split: '|' | last }}</span>
+            {% else %}
+            {{ section.settings.title | split: '|' | first }}
+            {% endif %}
+          </h2>
+        </div>
+        {% endif %}
+    <div class="col-md-12 cont text-center">
+{% if section.settings.title-2 != blank %}
+  <h6> {{section.settings.title-2 }} </h6>
+{% endif %}
+  {% if section.settings.title-3 != blank %}
+  <a href="tel:{{section.settings.title-3 }}">{{section.settings.title-3 }}</a> 
+{% endif %}
+  </div>
+</div>
+{% endif %}
+<div class="row">
+  {%if section.settings.title-4 != blank%}
+   <div class="heading-block2 col-md-12">
+          <h2 class="title">
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ section.settings.title-4 | split: '|' | first }}</span>
+            <span class="lang2">{{ section.settings.title-4 | split: '|' | last }}</span>
+            {% else %}
+            {{ section.settings.title-4 | split: '|' | first }}
+            {% endif %}
+          </h2>
+        </div>
+  {%endif%}
+</div>
+
+{% schema %}
+  {
+    "name": "account-help disk",
+    "settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Heading"
+},
+{
+"type": "text",
+"id": "title-2",
+"label": "description"
+},
+{
+"type": "text",
+"id": "title-3",
+"label": "help number"
+},
+                {
+"type": "header",
+"content": "billing heading"
+},
+{
+"type": "text",
+"id": "title-4",
+"label": "Billing and Account Title"
+}
+]
+  }
+{% endschema %}
+
+
