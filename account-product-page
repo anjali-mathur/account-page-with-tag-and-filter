@@ -1,0 +1,301 @@
+{% if section.settings.enable_google-portal-product%}
+{%comment%}
+{% if current_tags == blank %}
+{% assign has_refined = false %}
+{% else %}
+{% assign has_refined = true %}
+{% endif %}
+{%endcomment%}
+ {% assign tabnew_collection = section.settings.tabnew_collection %}
+<div class="home-product-loadmore">
+   <div class="row">
+    <div class="left-tittle col-sm-8 col-xs-7">
+    {% if section.settings.tabs_title_block != blank %}
+    <div class="block-title">
+      <h2 style="color:{{section.settings.color_for_tittle3 }}">
+      {% if settings.enable_multilang %}
+      <span class="lang1">{{ section.settings.tabs_title_block | split: '|' | first }}</span>
+      <span class="lang2">{{ section.settings.tabs_title_block | split: '|' | last }}</span>
+      {% else %}
+      <span>{{ section.settings.tabs_title_block | split: '|' | first }}</span>
+      {% endif %}
+      </h2></div>
+    {% endif %} 
+    </div>
+   <div class="years-filter col-sm-4 col-xs-5">
+       <ul class="hover-menu"> 
+        <li> <span> Year</span>
+        {% assign tags = section.settings.shop_by_tags_2_list_tags | split: ',' %} 
+          
+       <ul class="widget-content year-filter">
+        
+         {%for tag in tags%}
+         {% assign tag_value = tag | handleize %}
+         {% capture url %}/collections/{{ tabnew_collection }}/{{ tag | handle }}{% endcapture %}
+         {% if current_tags contains tag %}
+         	<li data-group="year" data-handle="{{ tag | handle }}" class="year-filter-option advance-filters active-filter">{{tag | remove_first: 'year'  | remove_first: '_' |replace: '-',' ' | link_to: url }}</li>
+      	 {% else%}
+         	<li data-group="year" data-handle="{{ tag | handle }}" class="year-filter-option advance-filters">{{tag | remove_first: 'year'  | remove_first: '_' |replace: '-',' ' | link_to: url }}</li>
+         {%endif%}
+         {%endfor%}
+        </ul>
+         </li>
+     </ul>
+    </div>
+  </div>
+  <div class="ajax-year-filter portal-blog-list">
+   
+    <div class="clearfix row collection-page">
+   
+      <div class="container_custom">
+        <div class="load-product">
+          <div class="products-grid product-grid-item">
+            {% for product in collections[tabnew_collection].products limit:6 %}
+            {% assign product_limitation = 0 %}
+            {% if section.settings.display_infinite_scrolling_homepage %}
+            {% assign product_limitation = section.settings.product_list_limit | plus: 0 %}
+            {% assign productIndex = forloop.index |minus:1 | modulo: product_limitation %}
+            {% else %}
+            {% assign productIndex = forloop.index |minus:1 %}
+            {% endif %}
+            {% assign infinite_scrolling_homepage = section.settings.display_infinite_scrolling_homepage %}
+            {%comment%}
+            {% include 'load-more-product-item' %}{%endcomment%}
+            {% assign lable_sale = false %}
+            {% if product.compare_at_price_min > product.price_min %}
+            {% assign lable_sale = true %}
+            {% endif %}
+
+            {% assign lable_out = true %}
+            {% if product.available  %}
+            {% assign lable_out = false %}
+            {% endif %}
+            
+           
+            <div class="item-col-4 col-sm-4 col-xs-6" id="product-{{ product.id }}">
+
+              {% comment %}
+              Link to your product with the 'within: collection' filter for the link to be aware of the collection.
+              This allows you to create collection-based navigation on the product page.
+
+              Results of using 'within: collection':
+              - Instead of a URL with /products/product-handle
+              you would get /collections/collection-handle/products/product-handle
+
+              For more info on navigation within a collection
+              - http://docs.shopify.com/support/your-store/collections/how-to-navigate-within-a-collection
+
+              {% endcomment %}
+
+              <div class="product-inner {% if lable_out %} out-stock-product {% endif %}">
+
+
+
+                <div class="product-image">
+                  {% if lable_sale or lable_out %}
+                  <div class="product-label">
+                    {% if lable_sale %}
+                    -{{ product.compare_at_price_max | minus:product.price | times:100 | divided_by:product.compare_at_price_max |round: 0 }}%
+                    {% endif %}
+                    {% if lable_out %}
+                    <span {% if settings.enable_multilang %}data-translate="product.out_of_stock"{%endif%}>{{ 'product.out_of_stock' | t }}</span>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                  {% if product.description contains "[label-icon-new]" %}
+                  <div class="label-new" {% if settings.enable_multilang %}data-translate="product.label_icon_new"{%endif%}>{{ 'product.label_icon_new' | t }}</div>
+                  {% endif %}
+
+
+
+                  <div role="listbox">
+                    {% for image in product.images %}
+                    <div class="item{% if forloop.first %} active{% endif %}">
+                      <a href="{{ product.url | within: collection }}"><img src="{{ image | product_img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}"></a>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <h3>
+                    <a class="product-title" href="{{ product.url | within: collection }}"> {{ product.title }}</a>
+                  </h3>
+
+
+                  <p>{{ product.description | truncatewords: 29, ' ' }}</p>
+
+                </div>
+               
+
+                <div class="clr"></div>
+              </div>
+              <div class="clr"></div>
+            </div>
+
+            
+            {% else %}
+           
+            {% for i in (1..10) %}
+            <div class="grids-item grid__item {{ grid_item_width }} " style="width:20%;padding:0 5px;float:left">
+              <div class="grid-item grid-view-item">
+                <a href="#" class="grid-view-item__link">
+                  {% if product.title %}
+                  {%- assign compare_at_price = product.compare_at_price -%}
+                  {%- assign price = product.price -%}
+                  {%- assign price_varies = product.price_varies -%}
+                  {%- assign available = product.available -%}
+                  {% else %}
+                  {%- assign compare_at_price = 1999 -%}
+                  {%- assign price = 1999 -%}
+                  {%- assign price_varies = false -%}
+                  {%- assign available = true -%}
+                  {% endif %}
+                  <div class="grid-view-item__image">
+                    {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                    {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                  <div class="h4 grid-view-item__title" {% if settings.enable_multilang %}data-translate="homepage.onboarding.product_title"{%endif%}>{{ 'homepage.onboarding.product_title' | t }}</div>
+                  <div class="grid-view-item__meta">
+                    <s class="product-price__price">{{ compare_at_price | money }}</s>
+                  </div>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+
+            {% endfor %}
+          </div> 
+          {% if tabnew_collection =='none' %}
+
+          {% else %}
+          {% assign products_to_show = section.settings.product_list_limit %} 
+
+          {% assign number_colum = section.settings.collection_results_per_row1 %}
+          <script>
+            $(document).ready(function() {
+
+              var count_a = jQuery(".product-loadmore" ).width();
+              var width_item = count_a / {{ number_colum }};
+              jQuery(".product-loadmore .grid-item ").css("width", width_item);
+            });
+            var productsToShow = {{products_to_show}};
+            var totalProducts = {{collections[tabnew_collection].all_products_count}};
+            jQuery(".load-more a").click(function() {
+              if (jQuery('.load-product .products-grid .grid-item:hidden').length > 0) {
+                jQuery('.load-product .products-grid .grid-item:hidden:lt('+productsToShow+')').each(function() {
+                  jQuery(this).show();
+                  {% if settings.product_item_no_hover %}
+                  jQuery(this).find('img').css('height','auto');              
+                  {% endif %}
+                  if (window.product_image_resize) {
+                    jQuery(this).find('img').fakecrop({ 
+                      fill: window.images_size.is_crop,
+                      widthSelector: ".load-product .products-grid .grid-item:first .product-image",
+                      ratioWrapper: window.images_size
+                    });
+                  }
+                });        
+
+                jQuery("window" ).scroll();
+                if (jQuery('.load-product .products-grid .grid-item:hidden').length == 0) {
+                  //no more products
+                  jQuery(".load-product .load-more a").text("{{settings.product_list_no_more_product_text}}").addClass('disabled');
+                                                            }
+                                                            }
+                                                            });
+          </script>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+<script>
+   $(function() { 
+    var  activeYear  = $('.year-filter-option [data-group="year"]').data('handle');
+       
+    $(document).on('click', '.year-filter-option', function(e){
+     e.preventDefault();
+     el = $(this);
+     activeYear = el.data('handle');
+       //alert(activeYear);
+     filter_data(); 
+   });
+   function filter_data(){
+      var base_url = window.location.origin+'/collections/{{ tabnew_collection }}/';
+      var slug = '';
+     if(activeYear){
+       slug += activeYear;   
+     }
+     var get_url = base_url+slug;
+      $('.product-grid-item').html('<div class="_jsLoaderDiv"><img class="_jsLoader" src="https://cdn.shopify.com/s/files/1/2358/5863/t/5/assets/loading.gif" ></div>');
+      $.get(get_url, function(data){
+	    $content =  $(data).find('.collection-page').html();
+        $('.collection-page').html($content);
+        history.pushState('', '', get_url);
+        
+      });
+   }  
+   });
+   </script> 
+
+{%endif%}
+{% schema %}
+{
+"name": "Product Grid",
+"class": "portal-section section",
+"settings": [
+{
+        "type": "checkbox",
+        "id": "enable_google-portal-product",
+        "label": "Enable"
+        },
+{
+"type": "text",
+"id": "tabs_title_block",
+"label": "Heading",
+"default": "Product Grid"
+},
+  {
+            "type": "color",
+            "id": "color_for_tittle3",
+            "label": "Heading Color",
+            "default": "#000",
+            "info": "Default Value: #2d2d2d"
+          },
+
+{
+"type": "collection",
+"id": "tabnew_collection",
+"label": "Collection"
+},
+{
+                  "type": "text",
+                  "id": "shop_by_tags_2_list_tags",
+                  "label": "Shop by tags 2 list",
+                  "default": "year_2016, year_2017, year_2015, year_2014",
+                  "info": "Separate by a comma, i.e \"XS, S, M, L, XL\"."
+                },
+  {
+            "type": "color",
+            "id": "color_for_tittle1",
+            "label": "Heading Color",
+            "default": "#000",
+            "info": "Default Value: #2d2d2d"
+          }
+
+
+],
+"presets": [
+{
+"name": "Product Grid",
+"category": "Collection"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
