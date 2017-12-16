@@ -1,0 +1,10 @@
+  <div class="my-account-top">
+  <h1>{{ 'customers.account.title' | t }}</h1>
+     <h5>{{ customer.name }}</h5>
+  {%section 'membership-type'%} 
+  </div>
+  {% section 'account-blog-portal'%}
+  <div class="clr"></div>
+  {%section 'account-product-page'%}
+   {%section 'account-useful-links'%}
+   {%section 'account-help-desk'%}
